@@ -22,6 +22,7 @@ let critical = document.querySelector("[data-4]");
 let boxesForSingelContry = document.querySelector("[data-boxes]");
 let singelContryDataTitle = document.querySelector("[ata-cnr-title]");
 // singelContryDataTitle.innerText = "";
+const ctx = document.getElementById("myChart").getContext("2d");
 
 //!--------------------Api Functions--------------------------------------------------
 async function getCounries() {
@@ -107,6 +108,13 @@ async function coronaByContinent() {
   // console.log("filteredArray", filteredArray);
   return filteredArray;
 }
+function buildChart(countries, relevantData, category) {
+  myChartObj.data.labels = countries;
+  myChartObj.data.datasets[0].data = relevantData;
+  myChartObj.data.datasets[0].label = category;
+  myChart.update();
+}
+
 //---------------Evenst------------------------------------------------------------------
 asiaBtn.addEventListener("click", async (e) => {
   removeHiddenClass([hiddenDiv, select]);
@@ -244,8 +252,6 @@ function fillContryBoxesData(obj) {
   }
 }
 //!--------------------Chart--------------------------------------------------
-
-const ctx = document.getElementById("myChart").getContext("2d");
 const myChartObj = {
   type: "bar",
   data: {
@@ -269,35 +275,3 @@ const myChartObj = {
   },
 };
 const myChart = new Chart(ctx, myChartObj);
-function buildChart(countries, relevantData, category) {
-  myChartObj.data.labels = countries;
-  myChartObj.data.datasets[0].data = relevantData;
-  myChartObj.data.datasets[0].label = category;
-  myChart.update();
-}
-
-//Function to draw the chart
-// function drawingChart(graphFor, countryNames, countryCovidData) {
-//   myChart = new Chart(canvasEl, {
-//     type: "bar",
-//     data: {
-//       labels: countryNames,
-//       datasets: [
-//         {
-//           label: `COVID-19 ${graphFor}`,
-//           data: countryCovidData,
-//           backgroundColor: [""],
-//           borderColor: [""],
-//           borderWidth: 1,
-//         },
-//       ],
-//     },
-//     options: {
-//       scales: {
-//         y: {
-//           beginAtZero: true,
-//         },
-//       },
-//     },
-//   });
-// }
