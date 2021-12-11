@@ -1,0 +1,23 @@
+{
+  "name": "covidApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RL20/covidApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RL20/covidApp/issues"
+  },
+  "homepage": "https://github.com/RL20/covidApp#readme",
+  "dependencies": {
+    "chart.js": "^3.6.2"
+  }
+}

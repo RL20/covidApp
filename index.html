@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .hidden {
+        display: none;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.min.js" integrity="sha512-tMabqarPtykgDtdtSqCL3uLVM0gS1ZkUAVhRFu1vSEFgvB73niFQWJuvviDyBGBH22Lcau4rHB5p2K2T0Xvr6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="chart.js" defer></script>
+    <script src="index.js" defer></script>
+  </head>
+  <body style="width: 500px">
+    <div class="hidden" data-hidden-clk>
+      <button data-1>Confirmed</button>
+      <button data-2>Deaths</button>
+      <button data-3>Recovered</button>
+      <button data-4>Critical</button>
+    </div>
+    <canvas id="myChart" width="400" height="400"></canvas>
+    <button data-asia>Asia</button>
+    <button data-europ>Europe</button>
+    <button data-africa>Africa</button>
+    <button data-oceania>Oceania</button>
+    <button data-americas>Americas</button>
+    <!-- <select data-select name="" id=""> -->
+    <br />
+    <select data-select class="hidden" name="" id=""></select>
+  </body>
+</html>
