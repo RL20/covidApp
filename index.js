@@ -4,6 +4,7 @@ let selectedCountry = ""; //when country selected in  drop down list the value r
 let contriesByContinent = {}; //key=continent value array of object (key=country:value=code)
 let getCountriesFinish = false; //one the getCounries() finish produce the the dictenaries for the program ,the value turn true
 let currentPressedContinent = "all"; //when clicking on continent button the value will cheng to the current continent
+export let countryPassToChart = [];
 
 //!--------------------Dom variables--------------------------------------------------
 let asiaBtn = document.querySelector("[data-asia]");
@@ -18,6 +19,9 @@ let confirmed = document.querySelector("[data-1]");
 let deaths = document.querySelector("[data-2]");
 let recovered = document.querySelector("[data-3]");
 let critical = document.querySelector("[data-4]");
+let boxesForSingelContry = document.querySelector("[data-boxes]");
+let singelContryDataTitle = document.querySelector("[ata-cnr-title]");
+// singelContryDataTitle.innerText = "";
 
 //!--------------------Api Functions--------------------------------------------------
 async function getCounries() {
@@ -108,7 +112,7 @@ asiaBtn.addEventListener("click", async (e) => {
   removeHiddenClass([hiddenDiv, select]);
   btnClickStyle(e);
   while ((await getCounries()) === false) {}
-  countriesList = Object.keys(contriesByContinent["Asia"]);
+  let countriesList = Object.keys(contriesByContinent["Asia"]);
   fillSelectOptions(countriesList);
   currentPressedContinent = "Asia";
 });
@@ -116,7 +120,7 @@ europBtn.addEventListener("click", async (e) => {
   removeHiddenClass([hiddenDiv, select]);
   btnClickStyle(e);
   while ((await getCounries()) === false) {}
-  countriesList = Object.keys(contriesByContinent["Europe"]);
+  let countriesList = Object.keys(contriesByContinent["Europe"]);
   fillSelectOptions(countriesList);
   currentPressedContinent = "Europe";
 });
@@ -124,7 +128,7 @@ africaBtn.addEventListener("click", async (e) => {
   removeHiddenClass([hiddenDiv, select]);
   btnClickStyle(e);
   while ((await getCounries()) === false) {}
-  countriesList = Object.keys(contriesByContinent["Africa"]);
+  let countriesList = Object.keys(contriesByContinent["Africa"]);
   fillSelectOptions(countriesList);
   currentPressedContinent = "Africa";
 });
@@ -132,7 +136,7 @@ oceaniaBtn.addEventListener("click", async (e) => {
   removeHiddenClass([hiddenDiv, select]);
   btnClickStyle(e);
   while ((await getCounries()) === false) {}
-  countriesList = Object.keys(contriesByContinent["Oceania"]);
+  let countriesList = Object.keys(contriesByContinent["Oceania"]);
   fillSelectOptions(countriesList);
   currentPressedContinent = "Oceania";
 });
@@ -140,7 +144,7 @@ americasBtn.addEventListener("click", async (e) => {
   removeHiddenClass([hiddenDiv, select]);
   btnClickStyle(e);
   while ((await getCounries()) === false) {}
-  countriesList = Object.keys(contriesByContinent["Americas"]);
+  let countriesList = Object.keys(contriesByContinent["Americas"]);
   fillSelectOptions(countriesList);
   currentPressedContinent = "Americas";
 });
@@ -151,9 +155,14 @@ confirmed.addEventListener("click", async (e) => {
   for (let i = 0; i < res.length; i++) {
     let key = res[i].name;
     let value = res[i].latest_data.confirmed;
-    confirmArr.push({ [key]: value });
+    confirmArr.push([key, value]);
   }
   console.log("confirmArr", confirmArr);
+  let keys = confirmArr.map((e) => e[0]);
+  let values = confirmArr.map((e) => e[1]);
+
+  buildChart(keys, values, e.target.textContent);
+
   return confirmArr;
 });
 deaths.addEventListener("click", async (e) => {
@@ -162,9 +171,13 @@ deaths.addEventListener("click", async (e) => {
   for (let i = 0; i < res.length; i++) {
     let key = res[i].name;
     let value = res[i].latest_data.deaths;
-    deathsArr.push({ [key]: value });
+    deathsArr.push([key, value]);
   }
   console.log("deathsArr", deathsArr);
+  let keys = deathsArr.map((e) => e[0]);
+  let values = deathsArr.map((e) => e[1]);
+
+  buildChart(keys, values, e.target.textContent);
   return deathsArr;
 });
 recovered.addEventListener("click", async (e) => {
@@ -173,9 +186,13 @@ recovered.addEventListener("click", async (e) => {
   for (let i = 0; i < res.length; i++) {
     let key = res[i].name;
     let value = res[i].latest_data.recovered;
-    recoveredArr.push({ [key]: value });
+    recoveredArr.push([key, value]);
   }
   console.log("recoveredArr", recoveredArr);
+  let keys = recoveredArr.map((e) => e[0]);
+  let values = recoveredArr.map((e) => e[1]);
+
+  buildChart(keys, values, e.target.textContent);
   return recoveredArr;
 });
 critical.addEventListener("click", async (e) => {
@@ -184,9 +201,13 @@ critical.addEventListener("click", async (e) => {
   for (let i = 0; i < res.length; i++) {
     let key = res[i].name;
     let value = res[i].latest_data.critical;
-    criticalArr.push({ [key]: value });
+    criticalArr.push([key, value]);
   }
   console.log("criticalArr", criticalArr);
+  let keys = criticalArr.map((e) => e[0]);
+  let values = criticalArr.map((e) => e[1]);
+
+  buildChart(keys, values, e.target.textContent);
   return criticalArr;
 });
 //----------singel country statistics--------------------
@@ -203,14 +224,80 @@ select.addEventListener("change", async function () {
     newConfirmed: r.data.today.confirmed,
     newDeaths: r.data.today.deaths,
   };
-  // console.log("result", r.data.latest_data.confirmed);
   console.log("contryStatistic", contryStatistic);
+  countryPassToChart = [];
+  countryPassToChart.push(contryStatistic);
+  fillContryBoxesData(contryStatistic);
   return contryStatistic;
 });
-//!--------------------test--------------------------------------------------
-// getCounries("asia");
-// getCountryStatistic("IL");
-// console.log(getWorldCounries());
-// console.log("bla  ", contriesByContinent);
-// console.log("all", getCountriesStatistic());
-// setTimeout(() => console.log("contriesByContinent", contriesByContinent), 6000);
+function fillContryBoxesData(obj) {
+  boxesForSingelContry.innerHTML = "";
+  const arr = [obj.name, obj.confirmed, obj.critical, obj.deaths, obj.newConfirmed, obj.newDeaths, obj.recovered];
+  const arr2 = ["Name", "Confirmed", "Critical", "Deaths", "NewConfirmed", "NewDeaths", "Recovered"];
+
+  for (let i = 0; i < arr.length; i++) {
+    let div = document.createElement("div");
+    if (i === 0) div.innerText = `${arr[i]}`;
+    else div.innerText = `${arr2[i]}\n${arr[i]}`;
+    div.classList.add("box");
+    boxesForSingelContry.append(div);
+  }
+}
+//!--------------------Chart--------------------------------------------------
+
+const ctx = document.getElementById("myChart").getContext("2d");
+const myChartObj = {
+  type: "bar",
+  data: {
+    labels: [],
+    datasets: [
+      {
+        label: "# of Votes",
+        data: [],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(255, 159, 64, 0.2)"],
+        borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)", "rgba(255, 206, 86, 1)", "rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)", "rgba(255, 159, 64, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  },
+};
+const myChart = new Chart(ctx, myChartObj);
+function buildChart(countries, relevantData, category) {
+  myChartObj.data.labels = countries;
+  myChartObj.data.datasets[0].data = relevantData;
+  myChartObj.data.datasets[0].label = category;
+  myChart.update();
+}
+
+//Function to draw the chart
+// function drawingChart(graphFor, countryNames, countryCovidData) {
+//   myChart = new Chart(canvasEl, {
+//     type: "bar",
+//     data: {
+//       labels: countryNames,
+//       datasets: [
+//         {
+//           label: `COVID-19 ${graphFor}`,
+//           data: countryCovidData,
+//           backgroundColor: [""],
+//           borderColor: [""],
+//           borderWidth: 1,
+//         },
+//       ],
+//     },
+//     options: {
+//       scales: {
+//         y: {
+//           beginAtZero: true,
+//         },
+//       },
+//     },
+//   });
+// }

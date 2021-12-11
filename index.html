@@ -6,15 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
       .hidden {
         display: none;
       }
+      body {
+        max-height: 100vh;
+      }
+      canvas {
+        max-height: 80vh;
+      }
+
+      .boxes-container {
+        margin-top: 25px;
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        flex-wrap: wrap;
+      }
+      .box {
+        border: 1px solid red;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 10px;
+        padding: 4px;
+        background: lightpink;
+      }
+      h2 {
+        display: flex;
+        justify-content: center;
+      }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.min.js" integrity="sha512-tMabqarPtykgDtdtSqCL3uLVM0gS1ZkUAVhRFu1vSEFgvB73niFQWJuvviDyBGBH22Lcau4rHB5p2K2T0Xvr6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="chart.js" defer></script>
-    <script src="index.js" defer></script>
+    <script src="chart.js" defer type="module"></script>
+    <script src="index.js" defer type="module"></script>
   </head>
-  <body style="width: 500px">
+  <!-- <body style="width: 800px"> -->
+  <body>
     <div class="hidden" data-hidden-clk>
       <button data-1>Confirmed</button>
       <button data-2>Deaths</button>
@@ -30,5 +63,9 @@
     <!-- <select data-select name="" id=""> -->
     <br />
     <select data-select class="hidden" name="" id=""></select>
+    <div>
+      <h2 data-cnr-title class="h2"></h2>
+      <div data-boxes class="boxes-container"></div>
+    </div>
   </body>
 </html>
